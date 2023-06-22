@@ -78,7 +78,7 @@ Make sure you are taking the environment variables from your .env file:
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Take environment variables from .env file
-environ.Env.read_env(BASE_DIR / '.env')  # <-- Updated!
+environ.Env.read_env()  # <-- Updated!
 ```
 We can now set the specific environment variables in the .env file:
 
