@@ -1,5 +1,5 @@
 # Deploying a Django app to [fly.io](https://fly.io)
-
+![](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTorjndFm_1AcoKCTBGzcJdHSPqWfmkvY5gTi98TV3b4L3mNMYzmbPc54sq-6k4ZzFbFQ&usqp=CAU)
 ## Overview
 
 This post has two main sections:
