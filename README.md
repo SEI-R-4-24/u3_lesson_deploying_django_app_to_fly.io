@@ -9,7 +9,7 @@ This post has two main sections:
 
 ## Setting Up
 
-You will need to create a virtual environment. Since you have not had a dedicated environment for this app, you will also need to install all the packages you used in creating your app into this environment. 
+You will need to create a virtual environment. Since you have not had a dedicated environment for this app, you will also need to install all the packages you used in creating your app into this environment and remain in this environment throughout the deployment process and continued development process. 
 
 To create a dedicated Python development environment run the following command.
 
@@ -68,7 +68,7 @@ env = environ.Env(  # <-- Updated!
 )
 ```
 
-django-environ can take environment variables from the .env file. Go ahead and create this file in your root directory and also don't forget to add it to your .gitignore in case you are using Git for version control (you should!). We don't want those variables to be public, this will be used for the local environment and be set separately in our production environment.
+django-environ can take environment variables from the .env file. If you do not already have one, go ahead and create this file in same directory as your settings.py file. Don't forget to add it to your .gitignore in case you are using Git for version control (you should!). We don't want those variables to be public, this will be used for the local environment and be set separately in our production environment.
 
 Make sure you are taking the environment variables from your .env file:
 
@@ -107,6 +107,9 @@ The last environment variable to be set is the DATABASE_URL. env.db() will read 
 DATABASES = {
     # read os.environ['DATABASE_URL']
     'default': env.db()  # <-- Updated!
+    # comment out anything you have in here for your local database
+    # For deployment use this above.
+    # To run 
 }
 ```
 
@@ -141,11 +144,9 @@ python -m pip install gunicorn==20.1.0
 
 Handling static files in production is a bit more complex than in development. One of the easiest and most popular ways to serve our static files in production is using the WhiteNoise package, which serves them directly from our WSGI Server (Gunicorn). Install it with:
 
-
 ```shell
 python -m pip install whitenoise==6.3.0
 ```
-
 A few changes to our settings.py are necessary.
 
 * Add the WhiteNoise to the MIDDLEWARE list right after the SecurityMiddleware.
@@ -186,9 +187,9 @@ CSRF_TRUSTED_ORIGINS should also be defined with a list of origins to perform un
 
 ```python
 # settings.py
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.fly.dev']  # <-- Updated!
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.fly.dev']  # <-- Update this!
 
-CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev']  # <-- Updated!
+CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev']  # <-- Add this!
 ```
 ## Installed packages
 
@@ -321,14 +322,6 @@ SECRET_KEY      e0a6dbbd078004f7        2023-02-07T19:47:33Z
 
 fly launch sets up a running app, creating the necessary files: Dockerfile, .dockerignore and fly.toml.
 
-Don't forget to replace demo.wsgi in your Dockerfile with your Django project's name:
-
-```python
-# Dockefile
-...
-# replace demo.wsgi with <project_name>.wsgi
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "website.wsgi"]  # <-- Updated!
-```
 
 For security reasons, we'll add .env to our .dockerignore file - so Docker doesn't include our secrets during the build process.
 
